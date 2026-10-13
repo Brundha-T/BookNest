@@ -1,4 +1,4 @@
-
+```groovy
 pipeline {
     agent any
 
@@ -22,8 +22,7 @@ pipeline {
                 bat '"C:\\Users\\Asus\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" build -t booknest:latest .'
             }
         }
-
-        
+    }
 
     post {
         success {
