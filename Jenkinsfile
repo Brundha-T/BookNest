@@ -24,6 +24,13 @@ pipeline {
             }
         }
     }
+       
+        stage('Deploy with Ansible') {
+            steps {
+                bat 'wsl.exe -d Ubuntu --cd /mnt/d/BookNest ansible-playbook -i ansible/inventory.ini ansible/deploy.yml'
+            }
+        }
+
 
     post {
         success {
