@@ -18,7 +18,9 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                bat 'docker build -t booknest:latest .'
+                
+bat '"C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe" build -t booknest:latest .'
+
             }
         }
     }
