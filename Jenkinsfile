@@ -9,12 +9,12 @@ pipeline {
         }
 
         stage('Install and Test') {
-            steps {
-                bat 'python --version'
-                bat 'python -m pip install -r requirements.txt'
-                bat 'python -m pytest -q'
-            }
-        }
+    steps {
+        bat '"C:\\Users\\Asus\\AppData\\Local\\Programs\\Python\\Python311\\python.exe" --version'
+        bat '"C:\\Users\\Asus\\AppData\\Local\\Programs\\Python\\Python311\\python.exe" -m pip install -r requirements.txt'
+        bat '"C:\\Users\\Asus\\AppData\\Local\\Programs\\Python\\Python311\\python.exe" -m pytest -q'
+    }
+}
 
         stage('Build Docker Image') {
             steps {
