@@ -1,26 +1,34 @@
 pipeline {
     agent any
+
     stages {
-        stage('Checkout') { steps { checkout scm } }
-        stage('Install and Test') {
+        stage('Checkout') {
             steps {
-                sh '''
-                    python3 -m venv .venv
-                    . .venv/bin/activate
-                    pip install -r requirements.txt
-                    pytest -q
-                '''
+                checkout scm
             }
         }
-        stage('Build Docker Image') {
-            steps { sh 'docker build -t booknest:latest .' }
+
+        stage('Install and Test') {
+            steps {
+                bat 'python --version'
+                bat 'python -m pip install -r requirements.txt'
+                bat 'python -m pytest -q'
+            }
         }
-        stage('Deploy with Ansible') {
-            steps { sh 'ansible-playbook -i ansible/inventory.ini ansible/deploy.yml' }
+
+        stage('Build Docker Image') {
+            steps {
+                bat 'docker build -t booknest:latest .'
+            }
         }
     }
+
     post {
-        success { echo 'BookNest pipeline completed successfully.' }
-        failure { echo 'Pipeline failed; inspect the console output.' }
+        success {
+            echo 'BookNest pipeline completed successfully.'
+        }
+        failure {
+            echo 'Pipeline failed; inspect the console output.'
+        }
     }
 }
