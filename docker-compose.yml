@@ -1,3 +1,4 @@
+
 services:
   booknest:
     build: .
@@ -11,4 +12,32 @@ services:
       BOOKNEST_DB: /app/data/booknest.db
     volumes:
       - ./data:/app/data
+    restart: unless-stopped
+
+  
+  booknest-second:
+    build: .
+    image: booknest:ansible
+    container_name: booknest-second
+    ports:
+      - "5001:5000"
+    environment:
+      SECRET_KEY: ${SECRET_KEY:-local-development-change-me}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@booknest.local}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-Admin123!}
+      BOOKNEST_DB: /app/data/booknest.db
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+
+
+  ansible:
+    build: ./ansible-image
+    container_name: booknest-ansible
+    volumes:
+      - ./:/workspace
+      - ./data:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    working_dir: /workspace
+    entrypoint: ["sh", "-c", "while true; do sleep 3600; done"]
     restart: unless-stopped

@@ -1,11 +1,14 @@
+
 ---
 - name: Deploy BookNest container on the Jenkins agent
   hosts: local
   gather_facts: false
+
   tasks:
     - name: Check Docker availability
       ansible.builtin.command: docker --version
       changed_when: false
+
     - name: Build BookNest image
       community.docker.docker_image:
         name: booknest
@@ -13,19 +16,19 @@
         source: build
         build:
           path: "{{ playbook_dir }}/.."
-    - name: Create persistent database volume
-      community.docker.docker_volume:
-        name: booknest_data
+
     - name: Run BookNest container
       community.docker.docker_container:
         name: booknest-app
         image: booknest:latest
         state: started
         restart_policy: unless-stopped
-        published_ports: ["5000:5000"]
+        published_ports:
+          - "5000:5000"
         env:
-          SECRET_KEY: "{{ lookup('env','SECRET_KEY') | default('local-development-change-me', true) }}"
-          ADMIN_EMAIL: "{{ lookup('env','ADMIN_EMAIL') | default('admin@booknest.local', true) }}"
-          ADMIN_PASSWORD: "{{ lookup('env','ADMIN_PASSWORD') | default('Admin123!', true) }}"
+          SECRET_KEY: "{{ lookup('env', 'SECRET_KEY') | default('local-development-change-me', true) }}"
+          ADMIN_EMAIL: "{{ lookup('env', 'ADMIN_EMAIL') | default('admin@booknest.local', true) }}"
+          ADMIN_PASSWORD: "{{ lookup('env', 'ADMIN_PASSWORD') | default('Admin123!', true) }}"
           BOOKNEST_DB: /app/data/booknest.db
-        volumes: ["booknest_data:/app/data"]
+        volumes:
+          - "/mnt/d/BookNest/data:/app/data"
